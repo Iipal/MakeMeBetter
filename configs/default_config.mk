@@ -26,7 +26,7 @@ UNAME_S := $(shell uname -s)
 # Linux Specifications:
 ifeq ($(UNAME_S),Linux)
 # Only for Red-Hat systems where -e param isn't enabled by default in echo built-in command.
-# Remove this line if you have enabled -e option.
+# Remove this line if you have enabled -e option in echo command.
 ECHO += -e
 
 NPROCS := $(shell grep -c ^processor /proc/cpuinfo)
@@ -48,7 +48,8 @@ MAKE_PARALLEL_FLAGS := -j $(NPROCS) -l $(NPROCS) -Otarget
 CLR_INVERT := \033[7m
 CLR_GREEN := \033[32m
 CLR_WHITE := \033[0m
+CLR_BLUE := \033[34m
 
 MSG_SUCCESS := [$(CLR_GREEN)✓$(CLR_WHITE)]
-MSG_ISUCCESS := [$(CLR_INVERT)$(CLR_GREEN)✓$(CLR_WHITE)]
+MSG_BSUCCESS := [$(CLR_BLUE)✓$(CLR_WHITE)])
 MSG_SUCCESS_NO_CLR := [✓]
