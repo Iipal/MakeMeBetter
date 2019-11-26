@@ -26,10 +26,11 @@ $(LIBS_NAMES):
 	@$(MAKE) -C $(dir $@) $(MAKECMDGOALS)
 
 STATUS:
-	@$(ECHO) "/ compiled [$(words $(OBJS))] objects to $(CLR_INVERT)$(NAME)$(CLR_WHITE): $(MSG_SUCCESS)"
+	@$(ECHO) "/ compiled: $(NAME) $(MSG_SUCCESS)"
 ifneq (,$(DEFINES))
 	@$(ECHO) "| defines: $(DEFINES)"
 endif
+	@$(ECHO) "| details: [$(words $(OBJS))].c, [$(words $(IFLAGS))].h files."
 	@$(ECHO) "\ flags: $(CLR_BLUE)$(CFLAGS)$(CLR_WHITE)"
 
 debug_all: pre
@@ -40,10 +41,10 @@ sanitize: multi
 
 clean:
 	@$(DEL) $(OBJS)
-	@$(ECHO) "$(CLR_INVERT)deleted$(CLR_WHITE): $(NAME) source objects."
+	@$(ECHO) " | $(CLR_INVERT)deleted$(CLR_WHITE): $(NAME) source objects."
 fclean: clean
 	@$(DEL) $(NAME)
-	@$(ECHO) "$(CLR_INVERT)deleted$(CLR_WHITE): $(NPWD)"
+	@$(ECHO) " | $(CLR_INVERT)deleted$(CLR_WHITE): $(NPWD)"
 
 pre: fclean multi
 re: fclean multi
