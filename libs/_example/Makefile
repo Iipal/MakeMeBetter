@@ -15,23 +15,24 @@ endif
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	@$(AR) $(NAME) $(OBJS)
+	@$(AR) $(ARFLAGS) $(NAME) $(OBJS)
 	@$(MAKE) STATUS
 
 $(OBJS): %.o: %.c
-	@$(CC) $(addprefix "-D ",$(DEFINES)) -c $(CFLAGS) $(CC_WARNINGS_FLAGS) $(IFLAGS) $< -o $@
-	@$(ECHO) " | $@: $(MSG_BSUCCESS)"
+	@$(CC) $(addprefix "-D ",$(DEFINES)) -c $(CFLAGS) $(CFLAGS_WARN) $(IFLAGS) $< -o $@
+	@$(ECHO) " | $@: $(MSG_SUCCESS)"
 
 $(LIBS_NAMES):
 	@$(MAKE) -C $(dir $@) $(MAKECMDGOALS)
 
 STATUS:
-	@$(ECHO) "/ compiled: $(NAME) $(MSG_SUCCESS)"
+	@$(ECHO) "/ created: $(NAME) $(MSG_SUCCESS)"
 ifneq (,$(DEFINES))
 	@$(ECHO) "| defines: $(DEFINES)"
 endif
-	@$(ECHO) "| details: [$(words $(OBJS))].c, [$(words $(IFLAGS))].h files."
-	@$(ECHO) "\ flags: $(CLR_BLUE)$(CFLAGS)$(CLR_WHITE)"
+	@$(ECHO) "| compile default flags: $(CLR_UNDERLINE)$(CFLAGS_WARN)$(CLR_WHITE)"
+	@$(ECHO) "| compile optional flags: $(CLR_UNDERLINE)$(CFLAGS)$(CLR_WHITE)"
+	@$(ECHO) "\ archiver flags: $(CLR_UNDERLINE)$(ARFLAGS)$(CLR_WHITE)"
 
 debug_all: pre
 debug: multi
@@ -41,7 +42,7 @@ sanitize: multi
 
 clean:
 	@$(DEL) $(OBJS)
-	@$(ECHO) " | $(CLR_INVERT)deleted$(CLR_WHITE): $(NAME) source objects."
+	@$(ECHO) " | $(CLR_INVERT)deleted$(CLR_WHITE): $(NPWD) source objects"
 fclean: clean
 	@$(DEL) $(NAME)
 	@$(ECHO) " | $(CLR_INVERT)deleted$(CLR_WHITE): $(NPWD)"
