@@ -1,16 +1,16 @@
 include configs/default_lib_config.mk
 
-.PHONY: all multi
-multi:
-ifneq (,$(filter $(MAKECMDGOALS),debug debug_all))
-	@$(MAKE) $(MAKE_PARALLEL_FLAGS) CFLAGS="$(CFLAGS_DEBUG)" all
-else
- ifneq (,$(filter $(MAKECMDGOALS),sanitize sanitize_all))
-	@$(MAKE) $(MAKE_PARALLEL_FLAGS) CFLAGS="$(CFLAGS_SANITIZE)" all
+.PHONY: all multi $(LIBS_DIRS)
+multi: $(LIBS_DIRS)
+ ifneq (,$(filter $(MAKECMDGOALS),debug debug_all))
+	@$(MAKE) $(MAKE_PARALLEL_FLAGS) CFLAGS="$(CFLAGS_DEBUG)" DEFINES="$(shell echo $(NAME) | tr a-z A-Z)_DEBUG" all
  else
+  ifneq (,$(filter $(MAKECMDGOALS),sanitize sanitize_all))
+	@$(MAKE) $(MAKE_PARALLEL_FLAGS) CFLAGS="$(CFLAGS_SANITIZE)" DEFINES="$(shell echo $(NAME) | tr a-z A-Z)_SANITIZE" all
+  else
 	@$(MAKE) $(MAKE_PARALLEL_FLAGS) all
+  endif
  endif
-endif
 
 all: $(NAME)
 
@@ -24,10 +24,10 @@ $(OBJS): %.o: %.c
 
 STATUS:
 	@$(ECHO) "/ created: $(NAME) $(MSG_SUCCESS)"
-ifneq (,$(DEFINES))
-	@$(ECHO) "| defines: $(DEFINES)"
-endif
-	@$(ECHO) "| compiler default flags: $(CLR_UNDERLINE)$(CFLAGS_WARN)$(CLR_WHITE)"
+ ifneq (,$(DEFINES))
+	@$(ECHO) "| compiler custom defines: $(foreach dfns,$(DEFINES),$(CLR_INVERT)$(dfns)$(CLR_WHITE) )"
+ endif
+	@$(ECHO) "| compiler default flags: $(CFLAGS_WARN)"
 	@$(ECHO) "| compiler optional flags: $(CLR_UNDERLINE)$(CFLAGS)$(CLR_WHITE)"
 	@$(ECHO) "\ archiver flags: $(CLR_UNDERLINE)$(ARFLAGS)$(CLR_WHITE)"
 

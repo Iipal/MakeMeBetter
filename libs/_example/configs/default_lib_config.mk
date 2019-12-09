@@ -3,18 +3,22 @@ NPWD := $(CURDIR)/$(NAME)
 
 CC := clang
 
-CFLAGS := -march=native -mtune=native -Ofast -pipe -flto -fpic
-CFLAGS_DEBUG := -glldb -D DEBUG
-CFLAGS_SANITIZE := -glldb -D DEBUG -fsanitize=address
-
 CFLAGS_WARN := -Wall -Wextra -Werror -Wunused
 
-IF_DIRS := $(shell find . -name "includes")
-IF_SUBDIRS := $(foreach I_PATH,$(IF_DIRS),$(shell find $(I_PATH) -type d))
-IFLAGS := $(addprefix -I,$(IF_DIRS)) $(addprefix -I,$(IF_SUBDIRS))
+CFLAGS_DEBUG := -glldb
+CFLAGS_SANITIZE := $(CFLAGS_DEBUG) -fsanitize=address
+CFLAGS_OPTIMIZE := -march=native -mtune=native -Ofast -pipe -flto -fpic
 
+CFLAGS := $(CFLAGS_OPTIMIZE)
+
+ifneq (,$(wildcard ./includes))
+IFLAGS := $(addprefix -I,$(shell find ./includes -type d))
+endif
+
+ifneq (,$(wildcard ./srcs))
 SRCS := $(shell find srcs -name "*.c")
 OBJS := $(SRCS:.c=.o)
+endif
 
 ECHO := echo
 MAKE := make
@@ -41,11 +45,11 @@ ifeq ($(UNAME_S),Darwin)
 # Only for MacOS where brew install path on home directory
 #  or user don't have enought permissions to install latest version of GNUMake on system globally.
 # Remove this line if in your MacOS system already installed GNUMake 4.0.0 or later.
-ifneq ($(wildcard ~/.brew/bin/gmake),)
+ ifneq ($(wildcard ~/.brew/bin/gmake),)
 	MAKE := ~/.brew/bin/gmake
 	NPROCS := $(shell sysctl -n hw.ncpu)
 	MAKE_PARALLEL_FLAGS := -j $(NPROCS) -l $(NPROCS) -Otarget
-endif
+ endif
 
 AR := ar
 endif
