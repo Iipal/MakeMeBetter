@@ -26,7 +26,7 @@ DEL := rm -rf
 
 NPROCS := 1
 
-ARFLAGS = -Trcs
+ARFLAGS = -rcs
 
 UNAME_S := $(shell uname -s)
 # Linux Specifications:
