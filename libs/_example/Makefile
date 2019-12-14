@@ -35,6 +35,9 @@ STATUS:
  ifneq (,$(NAME))
 	@$(ECHO) "| compiled                : $(NAME) $(MSG_SUCCESS)"
  endif
+ ifneq (,$(CC))
+	@$(ECHO) "| compiler                : $(CC)"
+ endif
  ifneq (,$(DEFINES))
 	@$(ECHO) "| compiler custom defines : $(foreach dfns,$(DEFINES),$(CLR_INVERT)$(dfns)$(CLR_WHITE) )"
  endif
@@ -43,9 +46,6 @@ STATUS:
  endif
  ifneq (,$(CFLAGS_OPTIONAL))
 	@$(ECHO) "| compiler optional flags : $(CLR_UNDERLINE)$(CFLAGS_OPTIONAL)$(CLR_WHITE)"
- endif
- ifneq (,$(ARFLAGS))
-	@$(ECHO) "| archiver          flags : $(CLR_UNDERLINE)$(ARFLAGS)$(CLR_WHITE)"
  endif
 	@$(ECHO) "\\ -------------------------"
 
