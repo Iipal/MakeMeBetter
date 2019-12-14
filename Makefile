@@ -1,7 +1,7 @@
 include configs/default_config.mk
 
-.PHONY: all multi STATUS_START $(LIBS_DIRS)
-multi: STATUS_START $(LIBS_DIRS)
+.PHONY: all multi $(LIBS_DIRS) STATUS_START
+multi: $(LIBS_DIRS) STATUS_START
  ifneq (,$(filter $(MAKECMDGOALS),debug debug_all))
 	@$(MAKE) $(MAKE_PARALLEL_FLAGS) CFLAGS_OPTIONAL="$(CFLAGS_DEBUG)" \
 		DEFINES="$(shell echo $(basename $(NAME)) | tr a-z A-Z)_DEBUG" all
@@ -67,7 +67,7 @@ del_libs:
 	@$(DEL) $(LIBS_NAMES)
 
 pre: del multi
-re: del del_libs multi
+re: fclean multi
 
 clean: $(LIBS_DIRS)
 	@$(DEL) $(OBJS)
