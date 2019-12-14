@@ -3,13 +3,12 @@ NPWD := $(CURDIR)/$(NAME)
 
 CC := clang
 
-CFLAGS_WARN := -Wall -Wextra -Werror -Wunused
-
 CFLAGS_DEBUG := -glldb
-CFLAGS_SANITIZE := $(CFLAGS_DEBUG) -fsanitize=address
+CFLAGS_SANITIZE := $(CFLAGS_DEBUG) -Og -fsanitize=address
 CFLAGS_OPTIMIZE := -march=native -mtune=native -Ofast -pipe -flto -fpic
 
-CFLAGS := $(CFLAGS_OPTIMIZE)
+CFLAGS_OPTIONAL := $(CFLAGS_OPTIMIZE)
+CFLAGS := -Wall -Wextra -Werror -Wunused -MMD
 
 ifneq (,$(wildcard ./includes))
 IFLAGS := $(addprefix -I,$(shell find ./includes -type d))
@@ -18,6 +17,7 @@ endif
 ifneq (,$(wildcard ./srcs))
 SRCS := $(shell find srcs -name "*.c")
 OBJS := $(SRCS:.c=.o)
+DEPS := $(OBJS:.o=.d)
 endif
 
 ECHO := echo
