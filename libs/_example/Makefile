@@ -3,8 +3,7 @@ include configs/os.mk
 include configs/colors.mk
 
 .PHONY: make_optional all multi STATUS_START
-multi: make_optional
-	@$(MAKE) -e STATUS_START
+multi: make_optional STATUS_START
 	@$(MAKE) -e $(MAKE_PARALLEL_FLAGS) all
 
 all: $(NAME)

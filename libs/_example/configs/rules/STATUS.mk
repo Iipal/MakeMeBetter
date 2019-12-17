@@ -4,8 +4,6 @@ STATUS_START:
 	@$(ECHO) " | ---------------------- |"
 	@$(ECHO) " | making: $(CLR_UNDERLINE)$(NAME)$(CLR_WHITE) ..."
 	@$(ECHO) " | ---------------------- |"
- else
-	@$(ECHO) " | ---------------------- |"
  endif
 
 .PHONY: STATUS_END
@@ -33,4 +31,4 @@ STATUS_END:
 	@$(ECHO) "| archiver          flags : $(CLR_UNDERLINE)$(ARFLAGS)$(CLR_WHITE)"
   endif
  endif
-	@$(ECHO) "\\ ----------------------- /"
+	@$(ECHO) "\\ ----------------------- |"

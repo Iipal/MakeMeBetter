@@ -2,9 +2,8 @@ include configs/base.mk
 include configs/os.mk
 include configs/colors.mk
 
-.PHONY: make_optional all multi STATUS_START
-multi: make_optional
-	@$(MAKE) -e STATUS_START
+.PHONY: $(LIBS_DIRS) make_optional all multi STATUS_START
+multi: make_optional $(LIBS_DIRS) STATUS_START
 	@$(MAKE) -e $(MAKE_PARALLEL_FLAGS) all
 
 all: $(NAME)
