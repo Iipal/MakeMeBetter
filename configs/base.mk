@@ -1,6 +1,6 @@
 .EXPORT_ALL_VARIABLES:
 
-NAME := $(notdir $(CURDIR)).a
+NAME := $(notdir $(CURDIR))
 NPWD := $(CURDIR)/$(NAME)
 
 # all source code .c files must to places in to "srcs" folder(or sub-dirs) only.
