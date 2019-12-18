@@ -2,6 +2,8 @@
 .VScode/
 **.o
 **.a
+**.S
 **.d
 **.DS_Store
 test/
+ft_ls
