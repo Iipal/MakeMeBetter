@@ -33,7 +33,7 @@ endif
 # Compiler settings.
 CC              := clang
 CFLAGS          := -Wall -Wextra -Werror -Wunused -MMD
-CFLAGS_DEBUG    := -glldb -Og
+CFLAGS_DEBUG    := -g3
 CFLAGS_SANITIZE := $(CFLAGS_DEBUG) -fsanitize=address
 CFLAGS_OPTIMIZE := -march=native -mtune=native -Ofast -pipe -flto -fpic
 CFLAGS_ASSEMBLY := $(filter-out -flto -fpic,$(CFLAGS_OPTIMIZE)) -S -masm=intel
