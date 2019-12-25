@@ -31,3 +31,6 @@ assembly: multi
 
 debug_assembly_all: pre
 debug_assembly: multi
+
+pedantic_all: pre
+pedantic: multi
