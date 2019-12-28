@@ -41,7 +41,9 @@ $(LIBS_DIRS):
  endif
 
 -include configs/rules/STATUS.mk
+
 -include configs/rules/cleaners.mk
+.PHONY: re pre del del_libs clean_asms clean_deps clean fclean
 
 -include configs/rules/optional.mk
 .PHONY: debug debug_all sanitize sanitize_all assembly assembly_all debug_assembly debug_assembly_all pedantic pedantic_all
