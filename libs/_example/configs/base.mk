@@ -3,13 +3,13 @@
 NAME := $(notdir $(CURDIR)).a
 NPWD := $(CURDIR)/$(NAME)
 
-# all source code .c files must to places in to "srcs" folder(or sub-dirs) only.
-ifneq (,$(wildcard ./srcs))
-SRCS := $(shell find srcs -name "*.c")
+# all source code .c files must to places in to "src" folder(or sub-dirs) only.
+ifneq (,$(wildcard ./src))
+SRCS := $(shell find src -name "*.c")
 OBJS := $(SRCS:.c=.o)
-ASMS := # reversed for 'assembly' and 'assembly_all' rules where ASMS:=$(OBJS:%.o=%.S) and OBJS:= sets to nothing
+ASMS := # reversed for 'assembly' rules where ASMS:=$(OBJS:%.o=%.S) and OBJS:= sets to nothing
 else
-$(error "all source code .c files must to places in to "srcs" folder(or sub-dirs) only.")
+$(error "all source code .c files must to places in to "src" folder(or sub-dirs) only.")
 endif
 
 # all header .h files must be placed in to "includes" folder(or sub-dirs) only.
@@ -27,6 +27,7 @@ ifneq (,$(HEADER_DEPS))
  ifneq (,$(filter-out $(foreach dep,$(HEADER_DEPS),$(wildcard $(dep))),$(HEADER_DEPS)))
 $(error "Some of the configs/base.mk:$$HEADER_DEPS additional library headers dependencies have are an invalid path.")
  endif
+
 IFLAGS += $(addprefix -I,$(shell find $(foreach d,$(HEADER_DEPS),$(abspath $d)) -type d))
 endif
 
@@ -51,8 +52,15 @@ CFLAGS_OPTIONAL       := $(CFLAGS_OPTIMIZE)
 
 # Archiver settings.
 ARFLAGS := -rcs
-AR      := $(shell whereis llvm-ar | awk '{print $$2}')
-# if 'llvm-ar' not installed - using default ar, but for `clang -flto` compilations flags - archiver must be 'llvm-ar'.
-ifeq (,$(AR))
-AR      := ar
+
+ifeq (clang,$(CC))
+AR := $(shell whereis llvm-ar | awk '{print $$2}')
+
+ ifeq (,$(AR))
+$(error 'llvm-ar' not installed. For `clang` library compilations - archiver must be 'llvm-ar')
+ endif
+endif
+
+ifeq (gcc,$(CC))
+AR := ar
 endif
