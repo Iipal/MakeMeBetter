@@ -31,16 +31,23 @@ IFLAGS += $(addprefix -I,$(shell find $(foreach d,$(HEADER_DEPS),$(abspath $d)) 
 endif
 
 # Compiler settings.
-CC                    := clang
-CFLAGS                := -Wall -Wextra -Werror -Wunused -MMD -std=c11
-CFLAGS_PEDANTIC       := -Wpedantic
+CC     := clang
+CFLAGS := -Wall -Wextra -Werror -Wunused -MMD -std=c11
+
+ifeq (,$(shell command -v clang 2> /dev/null))
+CC     := gcc
+endif
+
+CFLAGS_OPTIMIZE       := -march=native -mtune=native -Ofast -pipe -flto -fpic
 CFLAGS_DEBUG          := -g3
 CFLAGS_SANITIZE       := $(CFLAGS_DEBUG) -fsanitize=address
-CFLAGS_OPTIMIZE       := -march=native -mtune=native -Ofast -pipe -flto -fpic
 CFLAGS_ASSEMBLY       := $(filter-out -flto -fpic,$(CFLAGS_OPTIMIZE)) -S -masm=intel
 CFLAGS_DEBUG_ASSEMBLY := $(CFLAGS_DEBUG) -S -masm=intel
+CFLAGS_PEDANTIC       := -Wpedantic
+CFLAGS_X86            := -m32
+CFLAGS_DEBUG_X86      := $(CFLAGS_DEBUG) -m32
 
-CFLAGS_OPTIONAL := $(CFLAGS_OPTIMIZE)
+CFLAGS_OPTIONAL       := $(CFLAGS_OPTIMIZE)
 
 # Archiver settings.
 ARFLAGS := -rcs
